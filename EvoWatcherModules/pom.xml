@@ -11,9 +11,6 @@
 
     <artifactId>EvoWatcherModules</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>EvoWatcherRedis</module>
-    </modules>
 
 
 </project>

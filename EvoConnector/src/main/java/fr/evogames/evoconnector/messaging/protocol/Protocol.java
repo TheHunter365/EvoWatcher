@@ -1,16 +1,17 @@
 package fr.evogames.evoconnector.messaging.protocol;
 
+import fr.evogames.evoconnector.messaging.metrics.MetricPacket;
 import fr.evogames.evoconnector.messaging.packet.AbstractPacket;
 
 public class Protocol {
 
-
     public static final String SPLIT_CHAR = "|";
-
 
     public enum ProtocolMap {
 
-        ;
+        METRIC_PACKET(0x1, MetricPacket.class);
+
+
         private int id;
         private Class<? extends AbstractPacket> packetClass;
 
@@ -27,7 +28,7 @@ public class Protocol {
             return id;
         }
 
-        public Class<? extends AbstractPacket> getPacketClass(int id) {
+        public static Class<? extends AbstractPacket> getPacketClass(int id) {
             Class<? extends AbstractPacket> packetClass = null;
             for (ProtocolMap map : values()) {
                 if (map.getId() == id) {
@@ -36,6 +37,17 @@ public class Protocol {
                 }
             }
             return packetClass;
+        }
+
+        public static int getId(Class<? extends AbstractPacket> packetClass) {
+            int id = 0;
+            for (ProtocolMap map : values()) {
+                if (map.getPacketClass().equals(packetClass)) {
+                    id = map.id;
+                    break;
+                }
+            }
+            return id;
         }
     }
 }

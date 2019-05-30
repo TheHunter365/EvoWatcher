@@ -12,10 +12,12 @@ public class MetricPoint {
     private TimeUnit unit;
 
     private Set<MetricField> fields;
+    private Set<MetricTag> tags;
 
     public MetricPoint(String measurement) {
         this.measurement = measurement;
         this.fields = new HashSet<>();
+        this.tags = new HashSet<>();
     }
 
     public MetricPoint time(long time, TimeUnit timeUnit) {
@@ -28,6 +30,11 @@ public class MetricPoint {
         this.fields.add(
                 new MetricField(name, value)
         );
+        return this;
+    }
+
+    public MetricPoint addTag(String name, String value) {
+        this.tags.add(new MetricTag(name, value));
         return this;
     }
 
@@ -45,5 +52,9 @@ public class MetricPoint {
 
     public Set<MetricField> getFields() {
         return fields;
+    }
+
+    public Set<MetricTag> getTags() {
+        return tags;
     }
 }

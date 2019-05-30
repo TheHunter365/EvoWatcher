@@ -25,7 +25,7 @@ public class EvoWatcherConfigDataLoader {
         } else {
             config = new EvoWatcherConfig();
             FileUtils.save(this.configFile, this.gson.toJson(config));
-            EvoWatcherController.LOGGER.warn("New Config file, please fill it !");
+            //EvoWatcherController.LOGGER.warn("New Config file, please fill it !");
             System.exit(0);
         }
         return config;

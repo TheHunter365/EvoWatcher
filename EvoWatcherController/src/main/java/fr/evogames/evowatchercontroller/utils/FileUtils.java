@@ -23,6 +23,7 @@ public class FileUtils {
     }
 
     public static String load(File file) {
+        if (!file.exists()) return "";
         StringBuilder sb = new StringBuilder();
 
         try {

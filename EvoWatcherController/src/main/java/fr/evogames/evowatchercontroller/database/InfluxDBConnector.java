@@ -14,6 +14,13 @@ public class InfluxDBConnector implements TimeSeriesDataBase {
 
     public InfluxDBConnector(String host, String user, String password) {
         this.influxDB = InfluxDBFactory.connect(host, user, password);
+
+        if (this.influxDB.ping().isGood()) {
+            //EvoWatcherController.LOGGER.info("Started Influxdb Connection");
+            System.out.println("Started Influxdb Connection");
+        } else {
+            System.exit(0);
+        }
     }
 
     public InfluxDB getInfluxDB() {
@@ -33,6 +40,8 @@ public class InfluxDBConnector implements TimeSeriesDataBase {
         pointBuider.tag(metricPoint.getTags().stream().collect(
                 Collectors.toMap(MetricTag::getTagKey, MetricTag::getTagValue)
         ));
+        System.out.println("Write metric : " + metricPoint.getMeasurement());
 
+        influxDB.write(pointBuider.build());
     }
 }

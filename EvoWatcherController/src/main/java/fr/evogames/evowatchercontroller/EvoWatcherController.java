@@ -7,12 +7,11 @@ import fr.evogames.evowatchercontroller.config.EvoWatcherConfig;
 import fr.evogames.evowatchercontroller.config.EvoWatcherConfigDataLoader;
 import fr.evogames.evowatchercontroller.database.InfluxDBConnector;
 import fr.evogames.evowatchercontroller.database.TimeSeriesDataBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.evogames.evowatchercontroller.metrics.MetricsManager;
 
 public class EvoWatcherController {
 
-    public static Logger LOGGER;
+    //public static Logger LOGGER;
 
     private Gson gson;
 
@@ -23,7 +22,7 @@ public class EvoWatcherController {
 
     public EvoWatcherController() {
 
-        LOGGER = LoggerFactory.getLogger(EvoWatcherController.class);
+        //LOGGER = LoggerFactory.getLogger(EvoWatcherController.class);
 
         this.gson = new GsonBuilder()
                 .serializeNulls()
@@ -31,6 +30,7 @@ public class EvoWatcherController {
                 .create();
         this.config = new EvoWatcherConfigDataLoader(this.gson).provideConf();
 
+        //LOGGER.info("Strating timeseriesdb Conenction");
         this.timeSeriesDataBase = new InfluxDBConnector(
                 this.config.getTimeSeriesDBCredentials().getHost(),
                 this.config.getTimeSeriesDBCredentials().getUser(),
@@ -41,8 +41,9 @@ public class EvoWatcherController {
             InfluxDBConnector connector = (InfluxDBConnector) this.timeSeriesDataBase;
             connector.setDatabase(this.config.getTimeSeriesDBCredentials().getDatabase());
         }
-
+        //LOGGER.info("Strating Messager Conenction");
         this.connector = new EvoConnector();
+        this.connector.getEventManager().registerListener(new MetricsManager(this.timeSeriesDataBase));
 
     }
 

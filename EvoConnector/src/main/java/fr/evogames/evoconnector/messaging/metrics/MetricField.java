@@ -14,8 +14,8 @@ public class MetricField {
         return name;
     }
 
-    public int getValue() {
-        return (int) value;
+    public Object getValue() {
+        return value;
     }
 
 }

@@ -22,8 +22,7 @@ public class PacketHandler extends JedisPubSub {
             try {
                 System.out.println("EvoConnector: Deconding packet !");
                 AbstractPacket packet = this.decoder.decodeRaw(message);
-
-                this.eventManager.callEvent(packet);
+                this.eventManager.callEvent(new PacketReceiveEvent(this.channel, packet));
             } catch (MalFormedPacketException e) {
                 e.printStackTrace();
             }

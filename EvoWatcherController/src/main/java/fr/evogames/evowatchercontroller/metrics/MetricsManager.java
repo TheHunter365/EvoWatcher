@@ -16,8 +16,9 @@ public class MetricsManager implements Listener {
         this.dataBase = dataBase;
     }
 
-    @Override
-    public void onPacket(AbstractPacket packet) {
+    @EventHandler
+    public void onPacket(PacketReceiveEvent event) {
+        AbstractPacket packet = event.getPacket();
         if (packet instanceof MetricPacket) {
             System.out.println("Event bling !");
             MetricPacket metric = (MetricPacket)packet;

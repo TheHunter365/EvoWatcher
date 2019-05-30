@@ -4,5 +4,4 @@ import fr.evogames.evoconnector.messaging.packet.AbstractPacket;
 
 public interface Listener {
 
-    void onPacket(AbstractPacket packet);
 }

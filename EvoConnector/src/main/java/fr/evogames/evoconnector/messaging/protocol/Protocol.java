@@ -5,7 +5,7 @@ import fr.evogames.evoconnector.messaging.packet.AbstractPacket;
 
 public class Protocol {
 
-    public static final String SPLIT_CHAR = "|";
+    public static final String SPLIT_CHAR = "!";
     public static final String CHANNEL = "Metric";
 
     public enum ProtocolMap {

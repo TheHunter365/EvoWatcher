@@ -1,7 +1,5 @@
 package fr.evogames.evoconnector.event;
 
-import fr.evogames.evoconnector.messaging.packet.AbstractPacket;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -19,9 +17,9 @@ public class EventManager {
         this.listeners.add(listener);
     }
 
-    public void callEvent(AbstractPacket packet) {
+    public void callEvent(Event event) {
         listeners.forEach(listener -> {
-            /*Method[] methods = listener.getClass().getDeclaredMethods();
+            Method[] methods = listener.getClass().getDeclaredMethods();
             for (Method method : methods) {
                 if (isEventHandler(method)) {
                     try {
@@ -31,8 +29,7 @@ public class EventManager {
                         e.printStackTrace();
                     }
                 }
-            }*/
-            listener.onPacket(packet);
+            }
         });
     }
 

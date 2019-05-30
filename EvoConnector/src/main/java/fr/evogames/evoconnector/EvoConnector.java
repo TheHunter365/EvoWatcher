@@ -8,14 +8,11 @@ import fr.evogames.evoconnector.messaging.bus.MessagingBus;
 import fr.evogames.evoconnector.messaging.bus.RedisBus;
 import fr.evogames.evoconnector.messaging.packet.PacketHandler;
 import fr.evogames.evoconnector.messaging.protocol.Protocol;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class EvoConnector {
 
-    private ExecutorService executor;
     private Gson gson;
     private MessagingBus messagingBus;
 
@@ -25,7 +22,6 @@ public class EvoConnector {
     private EventManager eventManager;
 
     public EvoConnector() {
-        this.executor = Executors.newSingleThreadExecutor();
 
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -36,14 +32,18 @@ public class EvoConnector {
 
         this.connectionManager = new ConnectionManager(this.CHANNEL, this.gson, this.messagingBus);
 
-        this.eventManager = new EventManager();
-
         if (messagingBus instanceof RedisBus) {
             RedisBus bus = (RedisBus) messagingBus;
-            executor.submit(()->
-                    bus.getResource()
-                            .subscribe(new PacketHandler(this.eventManager, Protocol.CHANNEL, this.gson), Protocol.CHANNEL));
+            Jedis jedis = bus.getResource();
+            System.out.println("Start packet decoding");
+            new Thread(()->
+                    jedis
+                            .subscribe(
+                                    new PacketHandler(this.eventManager, Protocol.CHANNEL, this.gson),
+                                    Protocol.CHANNEL))
+                    .start();
         }
+        this.eventManager = new EventManager();
 
     }
 

@@ -35,7 +35,17 @@ public class InfluxDBConnector implements TimeSeriesDataBase {
         Point.Builder pointBuider = Point.measurement(metricPoint.getMeasurement())
                 .time(metricPoint.getTime(), metricPoint.getUnit());
 
-        metricPoint.getFields().forEach((field)->pointBuider.addField(field.getName(), field.getValue()));
+        metricPoint.getFields().forEach((field)-> {
+            Object value = field.getValue();
+            if (value instanceof Integer) {
+                pointBuider.addField(field.getName(), (int)field.getValue());
+            } else if (value instanceof String) {
+                pointBuider.addField(field.getName(), (String)field.getValue());
+            } else if (value instanceof Double) {
+                pointBuider.addField(field.getName(), (double)field.getValue());
+            }
+
+        });
 
         pointBuider.tag(metricPoint.getTags().stream().collect(
                 Collectors.toMap(MetricTag::getTagKey, MetricTag::getTagValue)
